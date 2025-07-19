@@ -18,7 +18,7 @@ export const Card = ({ name, url, handleClick }) => {
     return (
         <button
             value={name}
-            className="border w-[170px] h-[220px] md:w-[200px] md:h-[250px] flex flex-col items-center justify-center cursor-pointer rounded-xl hover:bg-zinc-800"
+            className="border font-mono w-[170px] h-[220px] md:w-[200px] md:h-[250px] flex flex-col items-center justify-center cursor-pointer rounded-xl hover:bg-zinc-800"
             onClick={() => handleClick(name)}
         >
             <div>

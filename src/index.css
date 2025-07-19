@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'dt89';
+  src: url('../public/Slope\ Opera.otf') format('opentype');
+}
+
+#dt89{
+    font-family: dt89;
+}
+
 body{
     background: #1f1c1c;
     color: #ffffff;

@@ -1,17 +1,19 @@
 import GameBoard from "./components/GameBoard";
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
+import { Footer } from "./components/Footer";
 
 function App() {
     let [pokemonList, setPokemonList] = useState([]);
     let [gameEnd, setGameEnd] = useState(false);
     const [score, setScore] = useState(0);
     const [bestScore, setBestScore] = useState(0);
+
     useEffect(() => {
         (async () => {
             try {
                 const response = await fetch(
-                    "https://pokeapi.co/api/v2/pokemon?limit=5"
+                    "https://pokeapi.co/api/v2/pokemon?limit=15"
                 );
                 const data = await response.json();
                 const result = data.results.map((obj) => ({
@@ -37,12 +39,19 @@ function App() {
         }
     }
 
+    useEffect(() => {
+        if (gameEnd) {
+            resetGame();
+        }
+    }, [gameEnd]);
+
     function playGame(name) {
+        let isClickedTwice = false;
         let updatedList = pokemonList.map((pokemon) => {
             if (pokemon.name === name) {
                 if (pokemon.isClicked === true) {
-                    setGameEnd(true);
-                   
+                    isClickedTwice = true;
+                    setGameEnd(isClickedTwice);
                     console.log("after setendgame true", gameEnd);
                 } else {
                     pokemon.isClicked = true;
@@ -51,24 +60,28 @@ function App() {
             }
             return pokemon;
         });
-        console.log("checkGame is called", checkGame());
-        console.log(gameEnd);
-        
-        shuffle(updatedList);
-        setPokemonList(updatedList);
-    }
-    function checkGame() {
-        console.log("im from checkgame", gameEnd);
-        
-        let currentScore = score;
-        if (gameEnd) {
-            resetGame();
-        } else {
+        if (!isClickedTwice) {
+            let currentScore = score;
             setScore(score + 1);
             currentScore++;
             if (currentScore > bestScore) setBestScore(currentScore);
         }
+        shuffle(updatedList);
+        setPokemonList(updatedList);
+        // checkGame();
     }
+    // function checkGame() {
+    //     console.log("im from checkgame", gameEnd);
+
+    //     let currentScore = score;
+    //     if (gameEnd) {
+    //         resetGame();
+    //     } else {
+    //         setScore(score + 1);
+    //         currentScore++;
+    //         if (currentScore > bestScore) setBestScore(currentScore);
+    //     }
+    // }
     function resetGame() {
         let updatedList = pokemonList.map((pokemon) => {
             pokemon.isClicked = false;
@@ -79,11 +92,15 @@ function App() {
         setScore(0);
         setGameEnd(false);
     }
+
     return (
-        <>
-            <Navbar score={score} bestScore={bestScore} />
-            <GameBoard pokemonList={pokemonList} playGame={playGame} />
-        </>
+        <div className="flex flex-col h-screen">
+            <div className="flex-1">
+                <Navbar score={score} bestScore={bestScore} />
+                <GameBoard pokemonList={pokemonList} playGame={playGame} />
+            </div>
+            <Footer />
+        </div>
     );
 }
 
