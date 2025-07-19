@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 export const Card = ({ name, url, handleClick }) => {
-    const [images, setImages] = useState("");
+    const [images, setImages] = useState(null);
     useEffect(() => {
         (async () => {
             try {
